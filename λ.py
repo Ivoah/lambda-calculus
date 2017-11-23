@@ -36,7 +36,8 @@ def pull(s):
     for i, c in enumerate(s):
         if c == '(': parens += 1
         elif c == ')': parens -= 1
-        if parens == 0: return s[:i + 1]
+        if parens == -1 or (c == ' ' and parens <= 0): return s[:i]
+    return s
 
 def tokenize(string):
     res = []
@@ -54,10 +55,9 @@ def tokenize(string):
     return res
 
 def parse(expr):
-    print(expr)
     if expr[0] == '(':
         if expr[1] == 'λ':
-            return Lambda(expr[2], parse(expr[4:-1]))
+            return Lambda(expr[2], parse(pull(expr[4:-1])))
         else:
             func = pull(expr[1:])
             l = len(func)
@@ -68,7 +68,7 @@ def parse(expr):
                 args.append(parse(arg))
             return Application(parse(func), args)
     elif expr[0] == 'λ':
-        return Lambda(expr[1], parse(expr[3:-1]))
+        return Lambda(expr[1], parse(pull(expr[3:])))
     else:
         return Var(expr[0])
 
@@ -78,7 +78,6 @@ with open(sys.argv[1]) as f:
     expr = lines[-1]
     for var in lines[-2::-1]:
         var = list(map(str.strip, var.split('=')))
-        expr = expr.replace(var[0], var[1])
+        expr = expr.replace(var[0], f'({var[1]})')
 
     parse(tokenize(expr)).eval()
-    #print(parse(tokenize(expr)))
