@@ -23,4 +23,4 @@ zero? = λn.(n λ_.false true)
 
 Z = λf.((λx.f (λv.((x x) v))) (λx.f (λv.((x x) v))))
 
-(PRINT_BYTE (Z (λf.λx.(f x)) 8))
+(PRINT_NUM (Z (λf.λx.(f x)) 8))

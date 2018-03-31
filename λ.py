@@ -10,7 +10,7 @@ class Lambda:
         return f'(lambda {self.arg}: {self.body})'
 
     def eval(self):
-        return eval(str(self), {'PRINT_BYTE': lambda f: print(f(lambda x: x + 1)(0))})
+        return eval(str(self), {'PRINT_NUM': lambda f: print(f(lambda x: x + 1)(0))})
 
 class Application:
     def __init__(self, func, args):
@@ -22,7 +22,7 @@ class Application:
         return f'{self.func}' + ''.join(f'({arg})' for arg in self.args)
 
     def eval(self):
-        return eval(str(self), {'PRINT_BYTE': lambda f: print(f(lambda x: x + 1)(0))})
+        return eval(str(self), {'PRINT_NUM': lambda f: print(f(lambda x: x + 1)(0))})
 
 class Var:
     def __init__(self, name):
